@@ -1,12 +1,17 @@
 ---
-title: "Reciprocal Chimera Combined Data Analysis"
+title: "Reciprocal Chimera Cox Proportional Hazard Model"
 author: "Billy Tomaszewski"
 date: "`r Sys.Date()`"
-output: html_document
+output: pdf_document
+urlcolor: blue
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r tinytex-options, include=FALSE}
+options(tinytex.verbose = TRUE)
 ```
 
 ```{r}
@@ -25,7 +30,8 @@ dat <- dat %>% mutate(donor_geno = as.factor(donor_geno)) %>%
   mutate(recip_geno = as.factor(recip_geno)) %>% 
   mutate(rep = as.factor(rep))
 
-res.cox <- coxph(Surv(days_pi,censored) ~ ., data = dat)
+res.cox <- coxph(Surv(days_pi,censored) ~ donor_geno*recip_geno + donor_geno*rep + recip_geno*rep + 
+                   donor_geno:recip_geno*rep, data = dat)
 summary(res.cox)
 ```
 

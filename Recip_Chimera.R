@@ -13,7 +13,8 @@ dat <- dat %>% mutate(donor_geno = as.factor(donor_geno)) %>%
   mutate(recip_geno = as.factor(recip_geno)) %>% 
   mutate(rep = as.factor(rep))
 
-res.cox <- coxph(Surv(days_pi,censored) ~ ., data = dat)
+res.cox <- coxph(Surv(days_pi,censored) ~ donor_geno*recip_geno + donor_geno*rep + recip_geno*rep + 
+                   donor_geno:recip_geno*rep, data = dat)
 summary(res.cox)
 
 http://www.sthda.com/english/wiki/cox-proportional-hazards-model
